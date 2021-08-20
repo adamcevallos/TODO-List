@@ -1,0 +1,86 @@
+html,body{
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Lato', sans-serif;
+}
+
+#content {
+    display: grid;
+    height: 50em;
+    width: 100%;
+    grid-template-rows: 1fr 13fr;
+    grid-template-columns: 3fr 11fr;
+    grid-template-areas: 'header header'
+                         'left-menu main'
+                         'left-menu main';
+}
+
+.header {
+    grid-area: header;
+    background-color: rgb(64, 146, 135);
+}
+
+.header > p {
+    top: 50%;
+    transform: translateY(10%);
+    margin: auto 0 auto 1em;
+    text-align: left;
+    font-size: 2em;
+}
+
+.left-menu {
+    padding-left: 2em;
+    padding-top: 10%;
+    align-items: left;
+    grid-area: left-menu;
+    background-color: rgb(236,236,236);
+    display: flex;
+    flex-direction: column;
+}
+
+.tab {
+    padding-top: 0.6em;
+    cursor: pointer;
+    padding-left: 8px;
+    border-radius: 6px;
+    height: 2em;
+    width: 80%;
+    /* border: 1px solid black; */
+}
+
+.tab > span {user-select: none;}
+
+.circle-icon {
+    font-size: 2em;
+    border: 1px solid black;
+    background-color: blue;
+    display: inline;
+    width:  1em;
+    height: 1em;
+}
+
+.tab:hover, .selected {
+    background-color: rgb(226, 225, 225);
+    transition-duration: 0.3s;
+}
+
+
+
+#projects {
+    margin-top: 1em;
+    margin-left: 0.5em;
+}
+
+#project-clickable{
+    left:0;
+    cursor: pointer;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 1.4em;
+}
+
+.main {
+    grid-area: main;
+    background-color: rgb(240,240,240);
+}
+

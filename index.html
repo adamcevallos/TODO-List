@@ -12,42 +12,55 @@
 
     <body>
         <div id='content'>
-            <div class='header'>
+            <div id='header'>
                 <p>TODO list</p>
 
             </div>
-            <div class='left-menu'>
+            
+            <div id='todo-editor'>
+                <select>
+                    <option>1</option>
+                    <option>2</option>
+                </select>
+            </div>
+
+            <div id='left-menu'>
                 <div class='tab' id='inbox-tab'>
-                    <span></span>
+                    <span>*</span>
                     <span>Inbox</span>
+                    <span class='right-tab' id='inbox-total'>0</span>
                 </div>
                 <div class='tab' id='today-tab'>
-                    <span></span>
+                    <span>*</span>
                     <span>Today</span>
+                    <span class='right-tab' id='today-total'>0</span>
                 </div>
-                <div class='tab' id='thisweek-tab'>
-                    <span></span>
+                <div class='tab' id='week-tab'>
+                    <span>*</span>
                     <span>This Week</span>
+                    <span class='right-tab' id='week-total'>0</span>
                 </div>
                 <div class='tab' id='overdue-tab'>
-                    <span></span>
+                    <span>*</span>
                     <span>Overdue</span>
+                    <span class='right-tab' id='overdue-total'>0</span>
                 </div>
                 <div id='projects'>
                     <div id='project-clickable'>
                         <span>Projects</span>
+                        <span id='project-add-button'>&#65291</span>
                     </div>
+                    <div id='project-list'></div>
+
                 </div>
             </div>
-            <div class='main'></div>
-
 
             
         </div>
 
         
-        
-        <script src="main.js"></script>
+        <script src="main.js">
+        </script>
     </body>
 
 </html>

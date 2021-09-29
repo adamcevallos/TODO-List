@@ -34,7 +34,7 @@ html,body{
 }
 
 #left-menu {
-    min-width: 18   em;
+    min-width: 16em;
     padding-left: 2em;
     padding-top: 10%;
     align-items: left;
@@ -57,15 +57,6 @@ html,body{
 .right-tab {
     float:right;
 }
-
-/* .circle-icon {
-    font-size: 2em;
-    border: 1px solid black;
-    background-color: blue;
-    display: inline;
-    width:  1em;
-    height: 1em;
-} */
 
 .tab:hover, .selected {
     background-color: rgb(226, 225, 225);
@@ -94,6 +85,7 @@ html,body{
 }
 
 #project-add-form {
+    margin-top: 0.5em;
     column-gap: .2em;
     display: flex;
     height: 1.8em;
@@ -105,7 +97,7 @@ html,body{
     height: 1.3em;
     font-family: 'Lato', sans-serif;
     border-radius: 4px;
-    padding-left: 5px;
+    padding-left: 0.5em;
     outline: none;
     border: 1px solid black;
     background-color: #DDD;
@@ -136,21 +128,66 @@ html,body{
 #project-add-button:hover {color: black;}
 
 #todo-editor {
-    padding: 0 10em;
+    padding: 0em 10em 3em 10em;
     grid-area: todo-editor;
     background-color: rgb(240,240,240);
     text-align: center;
+    overflow: scroll;
 }
 
 #todo-editor > h1 {
     text-align: left;
 }
 
-/* #todo-list {
-    border: 1px solid black;
-} */
+.todo {
+    padding-left: 4rem 2rem;
+    display: flex;
+    text-align: left;
+    justify-content: center;
+    border-bottom: 1px solid rgb(182, 181, 181);
+    flex-direction: column;
+    gap: 5px;
+    width: 50em;
+    height: 7em;
+}
+
+.todo > p {
+    margin: 0;
+}
+
+.todo-circle {
+    padding: 0;
+    margin-right: 0.5rem;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 100px;
+}
+
+.top-row {display: flex;}
+
+.todo-description {
+    padding-left: 1.75em;
+    color: gray;
+}
+
+.todo-due-date {
+    padding-left: 1.75em;
+}
+
+.todo-circle:hover {
+    cursor: pointer;
+    filter:brightness(0.8);
+    transition-duration: 0.25s;
+}
+
+#todo-list {
+    padding-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+}
 
 #todo-add-button {
+    margin: 1rem 0;
     justify-content: left;
     display: flex;
     cursor: pointer;
@@ -161,6 +198,7 @@ html,body{
 }
 
 #todo-form {
+    margin: 1rem 0;
     font-family: 'Lato', sans-serif;
     background-color: #DDD;
     display: flex;

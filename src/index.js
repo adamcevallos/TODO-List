@@ -1,1 +1,1 @@
-import './tabNav'
+import './nav'

@@ -109,6 +109,33 @@ const todoStorage = (function() {
         }
         return returns;
     }
+
+    const getTodayTodos = () => {
+        const today = new Date().toDateString();
+
+        const todos = Object.values(_todos);
+        let todayTodos = [];
+
+        for (let i = 0; i < todos.length; i++) {
+            let dueDate = new Date(todos[i].getDueDate()).toDateString();
+            console.log(`today:${today}, dueDate: ${dueDate}`);
+            if (today === dueDate) {
+                todayTodos.push(todos[i]);
+            }
+        }
+
+        return todayTodos;
+    }
+
+    const getWeekTodos = () => {
+
+    }
+
+    const getOverdueTodos = () => {
+
+    }
+
+
     // const getTodosOfProject = (projectID) => {Object.values(_todos).filter(todo => {
     //     todo.getProject() === projectID;
     // });
@@ -122,6 +149,7 @@ const todoStorage = (function() {
         getTodo,
         getTodosOfProject,
         copyTodosFromStorage,
+        getTodayTodos,
     }
 
 })();

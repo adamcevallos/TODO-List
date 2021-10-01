@@ -135,6 +135,7 @@ const projectFormBuilder = (function() {
 
         // switch to new tab
         setTab(`project-${newProject.getID()}`);
+        location.reload();
     }
 
     return { buildProjectForm };

@@ -3,6 +3,7 @@ import { todoFactory } from '../todo';
 import { refresh } from '../nav';
 
 const convertDateToWords = (dateString) => {
+    console.log(dateString);2
     let x = new Date(dateString);
     let date = new Date(dateString);
     let dateArr = date.toDateString().split(' ');
@@ -13,9 +14,9 @@ const convertDateToWords = (dateString) => {
     return month + ' ' + day + ' ' + year;
 }
 
-const buildTodoCircle = (todoPriority) => {
+const buildTodoCircle = (todo) => {
 
-    let priority = parseInt(todoPriority);
+    let priority = parseInt(todo.getPriority());
     let circle = document.createElement('div');
 
     switch (priority) {
@@ -38,10 +39,6 @@ const buildTodoCircle = (todoPriority) => {
             console.log("invalid priority given for todo circle color");
     } 
 
-    circle.addEventListener('click', () => {
-
-    });
-
     return circle;
 }
 
@@ -53,8 +50,15 @@ const buildTodoElement = (todo) => {
     // build circle and title row
     let topRow = document.createElement('div');
     topRow.classList.add('top-row');
-    let circle = buildTodoCircle(todo.getPriority());
+
+    let circle = buildTodoCircle(todo);
+    circle.addEventListener('click', () => {
+        console.log(`todo id: ${todo.getID()}, project-id: ${todo.getProject()}`);
+        projectStorage.deleteTodoFromProject(todo.getID(), todo.getProject());
+        refresh(false);
+    });
     circle.classList.add('todo-circle');
+
     let title = document.createElement('span');
     title.classList.add('todo-title');
     title.textContent = todo.getTitle();
@@ -127,8 +131,9 @@ const formBuilder = (function() {
         title.id = 'todo-form-title';
         title.required = true;
         titleLabel.appendChild(title);
+        title.placeholder = "Exam";
 
-        return titleLabel
+        return titleLabel;
     }
 
     const buildDescription = () => {
@@ -137,7 +142,7 @@ const formBuilder = (function() {
 
         let description = document.createElement('input');
         description.id = 'todo-form-description';
-        description.required = true;
+        description.placeholder = "Economics Exam over chapters 1-5"
         descriptionLabel.appendChild(description);
 
         return descriptionLabel
@@ -148,8 +153,8 @@ const formBuilder = (function() {
         dateLabel.textContent = 'Due Date';
 
         let date = document.createElement('input');
-        date.type = 'date';
         date.required = true;
+        date.type = 'date';
         date.id = 'todo-form-date'
         dateLabel.appendChild(date);
 

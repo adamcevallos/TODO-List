@@ -88,6 +88,13 @@ const projectStorage = (function () {
         storage.setItem(`project-${projectID}`, _projects[projectID].stringify());
         todoStorage.addTodo(todo);
     };
+
+    const deleteTodoFromProject = (todoID, projectID) => {
+        _projects[projectID].deleteTodo(todoID);
+        todoStorage.removeTodo(todoID);
+        storage.removeItem(`todo-${todoID}`);
+        storage.setItem(`project-${projectID}`,_projects[projectID].stringify());
+    }
     
     const getAllProjects = () => Object.values(_projects).filter(
         (project) => project.getID() !== 'inbox'
@@ -111,6 +118,7 @@ const projectStorage = (function () {
         getAllProjects,
         getProject,
         addTodoToProject,
+        deleteTodoFromProject,
     };
 })();
 

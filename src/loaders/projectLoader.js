@@ -7,7 +7,6 @@ function loadProject(projectID, formActive = false) {
     let project = projectStorage.getProject(projectID);
 
     let todos = todoStorage.getTodosOfProject(project.getID());
-    console.log(todos);
 
     let todoEditor = document.getElementById('todo-editor');
     todoEditor.innerHTML = '';

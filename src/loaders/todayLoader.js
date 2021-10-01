@@ -1,4 +1,5 @@
 import { buildTodoAddButton, buildTodoElement } from "./contentBuilder";
+import { todoStorage } from '../todo';
 
 const getFormattedDate = () => {
     let date = new Date().toLocaleDateString();
@@ -17,12 +18,12 @@ function loadToday(formActive=false) {
     let todoList = document.createElement('div');
     todoList.id = 'todo-list';
 
-    // build add button / form
-    let add = (formActive) ? buildTodoAddForm() : buildTodoAddButton();
-    todoList.appendChild(add);
-
     todoEditor.appendChild(header);
     todoEditor.appendChild(todoList);
+
+    // display today's todos
+    let todos = todoStorage.getTodayTodos();
+    console.log(todos);
 }
 
 export { loadToday };

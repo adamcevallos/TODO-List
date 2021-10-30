@@ -101,44 +101,71 @@ const todoStorage = (function() {
         let todos = Object.values(_todos);
         let returns = [];
         for (let i = 0; i < todos.length; i++) {
-            // console.log(`comparing ${todos[i].getProject()} to ${projectID}`);
             if (todos[i].getProject() === projectID) {
                 returns.push(todos[i]);
-                // console.log('pushing');
             }
         }
         return returns;
     }
 
     const getTodayTodos = () => {
+
         const today = new Date().toDateString();
 
         const todos = Object.values(_todos);
         let todayTodos = [];
 
         for (let i = 0; i < todos.length; i++) {
-            let dueDate = new Date(todos[i].getDueDate()).toDateString();
-            console.log(`today:${today}, dueDate: ${dueDate}`);
+            let dateParts = todos[i].getDueDate().split('-');
+            let dueDate = new Date(dateParts[0],dateParts[1]-1,dateParts[2]).toDateString();
             if (today === dueDate) {
                 todayTodos.push(todos[i]);
             }
         }
-
         return todayTodos;
     }
 
     const getWeekTodos = () => {
+        let date = new Date();
+        date.setHours(0,0,0,0);
+        let todos = Object.values(_todos);
 
+        let weekTodos = [];
+        for (let i = 0; i < 7; i++) {
+            let dayTodos = []
+            for (let i = 0 ; i < todos.length; i++) {
+                const dueDateParts = todos[i].getDueDate().split('-');
+                const dueDate = new Date(dueDateParts[0],dueDateParts[1]-1,dueDateParts[2]);
+                if (dueDate.toDateString() === date.toDateString()) {
+                    dayTodos.push(todos[i]);
+                } else {
+                }
+            }
+            date.setDate(date.getDate() + 1);
+            date.setHours(0,0,0,0);
+
+            weekTodos.push(dayTodos);
+        }
+
+        return weekTodos;
     }
 
     const getOverdueTodos = () => {
+        const today = new Date();
+        today.setHours(0,0,0,0);    // only compare date
 
+        const todos = Object.values(_todos);
+        let overdueTodos = [];
+
+        for (let i = 0; i < todos.length; i++) {
+            let dateParts = todos[i].getDueDate().split('-');
+            let dueDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            if (today > dueDate) {
+                overdueTodos.push(todos[i]);
+            }
+        }
+        return overdueTodos;
     }
-
-
-    // const getTodosOfProject = (projectID) => {Object.values(_todos).filter(todo => {
-    //     todo.getProject() === projectID;
-    // });
 
     document.addEventListener('reload', copyTodosFromStorage());
 
@@ -150,6 +177,8 @@ const todoStorage = (function() {
         getTodosOfProject,
         copyTodosFromStorage,
         getTodayTodos,
+        getOverdueTodos,
+        getWeekTodos,
     }
 
 })();

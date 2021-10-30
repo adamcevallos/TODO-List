@@ -1,6 +1,7 @@
-import { buildTodoAddButton, buildTodoElement } from "./contentBuilder";
+import { buildTodoElement } from "./contentBuilder";
+import { todoStorage } from "../todo";
 
-function loadOverdue(formActive=false) {
+function loadOverdue() {
     let todoEditor = document.getElementById('todo-editor');
     todoEditor.innerHTML = '';
 
@@ -10,9 +11,11 @@ function loadOverdue(formActive=false) {
     let todoList = document.createElement('div');
     todoList.id = 'todo-list';
 
-    // build add button / form
-    let add = (formActive) ? buildTodoAddForm() : buildTodoAddButton();
-    todoList.appendChild(add);
+    // display today's todos
+    let todos = todoStorage.getOverdueTodos();
+    for (let i = 0; i < todos.length; i++) {
+        todoList.appendChild(buildTodoElement(todos[i]), true);
+    }
 
     todoEditor.appendChild(header);
     todoEditor.appendChild(todoList);

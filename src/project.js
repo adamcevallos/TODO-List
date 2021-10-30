@@ -66,7 +66,7 @@ const _buildProject = (projectString) => {
 const projectStorage = (function () {
 
     let storage = window.localStorage;
-    let inbox = projectFactory('inbox','inbox');
+    let inbox = projectFactory('Inbox','inbox');
     let _projects = { 'inbox' : inbox };
 
     const addProject = (project) => {

@@ -1,16 +1,14 @@
 import { projectStorage } from '../project';
-import { todoFactory } from '../todo';
+import { todoFactory, todoStorage } from '../todo';
 import { refresh } from '../nav';
 
 const convertDateToWords = (dateString) => {
-    console.log(dateString);2
-    let x = new Date(dateString);
-    let date = new Date(dateString);
+    let parts = dateString.split('-');
+    let date = new Date(parts[0], parts[1]-1, parts[2]);
     let dateArr = date.toDateString().split(' ');
     let month = dateArr[1];
     let day = parseInt(dateArr[2]);
     let year = ( dateArr[3] == new Date().getFullYear() ) ? '' : ` ${dateArr[3]}`;
-
     return month + ' ' + day + ' ' + year;
 }
 
@@ -26,7 +24,7 @@ const buildTodoCircle = (todo) => {
             break;
         case 2:
             circle.style.border = '1px solid blue';
-            circle.style.backgroundColor = 'light blue';
+            circle.style.backgroundColor = 'blue';
             break;
         case 3:
             circle.style.backgroundColor = 'orange';
@@ -50,19 +48,16 @@ const buildTodoElement = (todo) => {
     // build circle and title row
     let topRow = document.createElement('div');
     topRow.classList.add('top-row');
-
     let circle = buildTodoCircle(todo);
     circle.addEventListener('click', () => {
-        console.log(`todo id: ${todo.getID()}, project-id: ${todo.getProject()}`);
         projectStorage.deleteTodoFromProject(todo.getID(), todo.getProject());
         refresh(false);
     });
     circle.classList.add('todo-circle');
-
     let title = document.createElement('span');
     title.classList.add('todo-title');
-    title.textContent = todo.getTitle();
-
+    let projectName = projectStorage.getProject(todo.getProject()).getTitle();
+    title.textContent = todo.getTitle() + ' (' + projectName + ')';
     topRow.appendChild(circle);
     topRow.appendChild(title);
 
@@ -114,12 +109,22 @@ const formBuilder = (function() {
         let project = String(document.getElementById('todo-form-project').value);
         let priority = document.getElementById('todo-form-priority').value;
 
-        const projectID = (project.startsWith('project')) ? (project.at(-1)) : project;
-        console.log(projectID);
+        const projectID = (project.startsWith('project')) ? (project.split('-')[1]) : project;
         const todo = todoFactory(title,desc,date,projectID,priority);
-        
-        projectStorage.addTodoToProject(todo, projectID);
-        refresh(false);
+
+        // form validation
+        let form = document.getElementById('todo-form');
+        if (form.checkValidity()) {
+            projectStorage.addTodoToProject(todo, projectID);
+            refresh(false);
+        } else {
+            let sub = document.createElement('input');
+            sub.type = 'submit';
+            sub.style.display = 'none';
+            // sub.name = 'valButton';
+            form.appendChild(sub);
+            sub.click();
+        }
     }
     
     const buildTitle = () => {
@@ -131,18 +136,19 @@ const formBuilder = (function() {
         title.id = 'todo-form-title';
         title.required = true;
         titleLabel.appendChild(title);
-        title.placeholder = "Exam";
+        title.placeholder = "e.g., Economics Exam";
+        title.required = true;
 
         return titleLabel;
     }
 
     const buildDescription = () => {
         let descriptionLabel = document.createElement('label');
-        descriptionLabel.textContent = 'description';
+        descriptionLabel.textContent = 'Description';
 
         let description = document.createElement('input');
         description.id = 'todo-form-description';
-        description.placeholder = "Economics Exam over chapters 1-5"
+        description.placeholder = "e.g., Economics Exam over chapters 1-5"
         descriptionLabel.appendChild(description);
 
         return descriptionLabel
@@ -156,6 +162,14 @@ const formBuilder = (function() {
         date.required = true;
         date.type = 'date';
         date.id = 'todo-form-date'
+        
+        // set today as default
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+        date.value = today;
+
         dateLabel.appendChild(date);
 
         return dateLabel;
@@ -223,10 +237,10 @@ const formBuilder = (function() {
         submit.type = 'submit'
         submit.id = 'todo-form-submit';
         submit.value = 'Add todo';
-        submit.addEventListener('click', e => {
+        submit.addEventListener('click', e =>{
             e.preventDefault();
             submitAddForm();
-        }); 
+        });
 
         let close = document.createElement('input');
         close.id = 'todo-form-close';

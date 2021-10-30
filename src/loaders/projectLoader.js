@@ -13,6 +13,7 @@ function loadProject(projectID, formActive = false) {
 
     let header = document.createElement('h1');
     header.textContent = project.getTitle();
+    // header.textContent = header.textContent.at(0).toUpperCase() + header.textContent.substr(1).toLowerCase();
 
     let todoList = document.createElement('div');
     todoList.id = 'todo-list';

@@ -1,4 +1,3 @@
-import { loadInbox } from './loaders/inboxLoader';
 import { loadToday } from './loaders/todayLoader';
 import { loadWeek } from './loaders/weekLoader';
 import { loadOverdue } from './loaders/overdueLoader';
@@ -14,25 +13,40 @@ let storageTab = storage.getItem('selected');
 let currentTab = (storageTab) ? storageTab : 'inbox';
 
 const refresh = (formActive=false) => {
+    updateCounts();
     switch (currentTab) {
         case 'inbox':
             loadProject("inbox", formActive);
             // loadInbox(formActive);
             break;
         case 'overdue':
-            loadOverdue(formActive);
+            loadOverdue();
             break;
         case 'today':
-            loadToday(formActive);
+            loadToday();
             break;
         case 'week':
-            loadWeek(formActive);
+            loadWeek();
             break;
         default:
             let projectID = currentTab.slice(currentTab.indexOf('-')+1);
             loadProject(projectID, formActive);
     }
 
+}
+
+const updateCounts = () => {
+    let inboxCount = document.getElementById('inbox-total');
+    let todayCount = document.getElementById('today-total');
+    let overdueCount = document.getElementById('overdue-total');
+    let weekCount = document.getElementById('week-total');
+
+    inboxCount.textContent = todoStorage.getTodosOfProject('inbox').length;
+    todayCount.textContent = todoStorage.getTodayTodos().length;
+    overdueCount.textContent = todoStorage.getOverdueTodos().length;
+
+    let weekTodos = todoStorage.getWeekTodos();
+    weekCount.textContent = weekTodos.reduce((total, day) => total + day.length, 0);
 }
 
 const setTab = tab => {
@@ -98,6 +112,7 @@ const projectFormBuilder = (function() {
         let textbox = document.createElement('input');
         textbox.type = 'input';
         textbox.id = 'project-add-textbox';
+        textbox.required = true;
 
         let submitButton = document.createElement('input');
         submitButton.id = 'project-add-submit';
@@ -129,13 +144,23 @@ const projectFormBuilder = (function() {
     }
 
     const submitForm = (title) => {
-        let newProject = projectFactory(title);
-        projectStorage.addProject(newProject);
-        renderProjectTabs();
+        let form = document.getElementById('project-add-form');
+        if (form.checkValidity()) {
+            let newProject = projectFactory(title);
+            projectStorage.addProject(newProject);
+            renderProjectTabs();
 
-        // switch to new tab
-        setTab(`project-${newProject.getID()}`);
-        location.reload();
+            // switch to new tab
+            setTab(`project-${newProject.getID()}`);
+            location.reload();
+        } else {
+            let sub = document.createElement('input');
+            sub.type = 'submit';
+            sub.style.display = 'none';
+            form.appendChild(sub);
+            sub.click();
+        }
+
     }
 
     return { buildProjectForm };
@@ -154,6 +179,7 @@ const renderProjectTabs = () => {
     for (let i = 0; i < projects.length; i++) {
         let tab = projectTabBuilder.buildProjectTab(projects[i]);
         TabHighlighter.updateHighlight();
+
         projectList.appendChild(tab);
     }
 }
@@ -179,8 +205,11 @@ const TabHighlighter = (function () {
 
 const projectAddButton = document.getElementById('project-add-button');
 projectAddButton.addEventListener('click', () => {
-    let form = projectFormBuilder.buildProjectForm();
-    document.getElementById('project-list').appendChild(form);
+    if (! (document.getElementById('project-add-form'))) {
+        let form = projectFormBuilder.buildProjectForm();
+        document.getElementById('project-list').appendChild(form);
+    }
+
 });
 
 // allow tab switching

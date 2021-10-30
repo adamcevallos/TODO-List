@@ -8,7 +8,7 @@ const getFormattedDate = () => {
     // return format(today, 'MM/dd/yyyy');
 }
 
-function loadToday(formActive=false) {
+function loadToday() {
     let todoEditor = document.getElementById('todo-editor');
     todoEditor.innerHTML = '';
 
@@ -18,12 +18,14 @@ function loadToday(formActive=false) {
     let todoList = document.createElement('div');
     todoList.id = 'todo-list';
 
-    todoEditor.appendChild(header);
-    todoEditor.appendChild(todoList);
-
     // display today's todos
     let todos = todoStorage.getTodayTodos();
-    console.log(todos);
+    for (let i = 0; i < todos.length; i++) {
+        todoList.appendChild(buildTodoElement(todos[i]), true);
+    }
+
+    todoEditor.appendChild(header);
+    todoEditor.appendChild(todoList);
 }
 
 export { loadToday };
